@@ -94,12 +94,11 @@ def computeIOU(rec1, rec2):
     y1 = max(cy1, gy1)
     x2 = min(cx2, gx2)
     y2 = min(cy2, gy2)
- 
+
     w = max(0, x2 - x1 + 1)
     h = max(0, y2 - y1 + 1)
     area = w * h
-    iou = area / (S_rec1 + S_rec2 - area)
-    return iou
+    return area / (S_rec1 + S_rec2 - area)
 
 def intv(*value):
 
@@ -108,7 +107,7 @@ def intv(*value):
         value = value[0]
 
     if isinstance(value, tuple):
-        return tuple([int(item) for item in value])
+        return tuple(int(item) for item in value)
     elif isinstance(value, list):
         return [int(item) for item in value]
     elif value is None:
@@ -124,7 +123,7 @@ def floatv(*value):
         value = value[0]
 
     if isinstance(value, tuple):
-        return tuple([float(item) for item in value])
+        return tuple(float(item) for item in value)
     elif isinstance(value, list):
         return [float(item) for item in value]
     elif value is None:
@@ -213,7 +212,7 @@ class RandomColor(object):
                 self.class_mapper[label] = len(self.class_mapper)
             return self.class_mapper[label]
         else:
-            raise Exception("label is not support type{}, must be str or int".format(type(label)))
+            raise Exception(f"label is not support type{type(label)}, must be str or int")
 
     def __getitem__(self, label):
         return self.colors[self.get_index(label)]
@@ -277,34 +276,28 @@ def pad(image, stride=32):
 
 def log(v):
 
-    if isinstance(v, tuple) or isinstance(v, list) or isinstance(v, np.ndarray):
+    if isinstance(v, (tuple, list, np.ndarray)):
         return [log(item) for item in v]
-    
+
     base = np.exp(1)
     if abs(v) < base:
         return v / base
-    
-    if v > 0:
-        return np.log(v)
-    else:
-        return -np.log(-v)
+
+    return np.log(v) if v > 0 else -np.log(-v)
     
 def exp(v):
 
-    if isinstance(v, tuple) or isinstance(v, list):
+    if isinstance(v, (tuple, list)):
         return [exp(item) for item in v]
     elif isinstance(v, np.ndarray):
         return np.array([exp(item) for item in v], v.dtype)
-    
+
     gate = 1
     base = np.exp(1)
     if abs(v) < gate:
         return v * base
-    
-    if v > 0:
-        return np.exp(v)
-    else:
-        return -np.exp(-v)
+
+    return np.exp(v) if v > 0 else -np.exp(-v)
 
 
 def file_name_no_suffix(path):

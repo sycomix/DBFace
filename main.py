@@ -80,7 +80,9 @@ def detect_image(model, file):
     for obj in objs:
         common.drawbbox(image, obj)
 
-    common.imwrite("detect_result/" + common.file_name_no_suffix(file) + ".draw.jpg", image)
+    common.imwrite(
+        f"detect_result/{common.file_name_no_suffix(file)}.draw.jpg", image
+    )
 
 
 def image_demo():
